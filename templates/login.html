@@ -1,0 +1,28 @@
+<div class="log-form">
+	<h2> Login to your accout</h2>
+	<form method="post" action ="/login">
+		<label for="name">User name</label>
+		<input type="text" id="name" name="name"> <br/>
+		<label for="password">Password</label>
+		<input type="password" id="password" name="password"> <br/>
+		<br>
+		<button type ="submit"> Login </button>
+		<button type = "submit" onclick="signOut()">Log out</button
+	</form>
+	<meta name= "google-signin-client_id" content="870884524370-4degio3n3qeqdn5um4orrt56o6mvd843.apps.googleusercontent.com">
+	<script src = "https://apis.google.com/js/platform.js" async defer></script>
+	<h1>Demo</h1>
+	<div class="g-signin2"></div>
+	
+	<script>
+		function onSignIn(googleUser){
+			console.log("User is " +  JSON.stringify(googleUser.getBasicProfile))
+		}
+	
+		function signOut(){
+			gapi.auth2.getAuthInstance().signOut().then(function(){
+				console.log("User signed out");
+			});
+		}
+	</script>
+</div>
