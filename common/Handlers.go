@@ -4,7 +4,7 @@ import (
     "fmt"
     "net/http"
     helpers "../helpers"
-    repos "../repos"
+	mysql "../mysql"
     "github.com/gorilla/securecookie"
 )
  
@@ -16,37 +16,72 @@ var cookieHandler = securecookie.New(
  
 // for GET
 func LoginPageHandler(response http.ResponseWriter, request *http.Request) {
+	fmt.Println("LoginPageHandler GET called")
     var body, _ = helpers.LoadFile("templates/login.html")
     fmt.Fprintf(response, body)
 }
  
 // for POST
 func LoginHandler(response http.ResponseWriter, request *http.Request) {
+	fmt.Println("LoginHandler POST called")
     name := request.FormValue("name")
     pass := request.FormValue("password")
     redirectTarget := "/"
     if !helpers.IsEmpty(name) && !helpers.IsEmpty(pass) {
         // Database check for user data!
-        _userIsValid := repos.UserIsValid(name, pass)
+        _userIsValid := mysql.Is_user_registered(name, pass)
  
         if _userIsValid {
             SetCookie(name, response)
-            redirectTarget = "/index"
+            redirectTarget = "/edit_profile"
         } else {
             redirectTarget = "/register"
         }
     }
     http.Redirect(response, request, redirectTarget, 302)
 }
+
+// for GET
+func EditPageHandler(response http.ResponseWriter, request *http.Request) {
+	fmt.Println("EditPageHandler GET called")
+    var body, _ = helpers.LoadFile("templates/edit_profile.html")
+    fmt.Fprintf(response, body)
+}
  
 // for GET
 func RegisterPageHandler(response http.ResponseWriter, request *http.Request) {
+	fmt.Println("RegisterPageHandler GET called")
     var body, _ = helpers.LoadFile("templates/register.html")
     fmt.Fprintf(response, body)
+}
+
+// for POST
+func EditHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("EditHandler POST called")
+    r.ParseForm()
+ 
+	email := r.FormValue("email")
+    oldPass := r.FormValue("oldpassword")
+    newPassword := r.FormValue("newPassword")
+    confirmPassword := r.FormValue("confirmPassword")
+ 
+    _email, _oldPass, _newPassword, _confirmPassword := false, false, false, false
+    _email = !helpers.IsEmpty(email)
+    _oldPass = !helpers.IsEmpty(oldPass)
+    _newPassword = !helpers.IsEmpty(newPassword)
+    _confirmPassword = !helpers.IsEmpty(confirmPassword)
+ 
+    if _oldPass && _email && _newPassword && _confirmPassword {
+        mysql.Edit_user_password(email, oldPass, newPassword)
+		
+    } else {
+        fmt.Fprintln(w, "This fields can not be blank!")
+    }
 }
  
 // for POST
 func RegisterHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("RegisterHandler POST called")
     r.ParseForm()
  
     uName := r.FormValue("username")
@@ -65,6 +100,7 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
         fmt.Fprintln(w, "Email for Register : ", email)
         fmt.Fprintln(w, "Password for Register : ", pwd)
         fmt.Fprintln(w, "ConfirmPassword for Register : ", confirmPwd)
+        mysql.Insert_user_table(email,pwd)
     } else {
         fmt.Fprintln(w, "This fields can not be blank!")
     }
@@ -72,6 +108,7 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
  
 // for GET
 func IndexPageHandler(response http.ResponseWriter, request *http.Request) {
+	fmt.Println("IndexPageHandler GET called")
     userName := GetUserName(request)
     if !helpers.IsEmpty(userName) {
         var indexBody, _ = helpers.LoadFile("templates/index.html")
@@ -83,6 +120,7 @@ func IndexPageHandler(response http.ResponseWriter, request *http.Request) {
  
 // for POST
 func LogoutHandler(response http.ResponseWriter, request *http.Request) {
+	fmt.Println("LogoutHandler Post called")
     ClearCookie(response)
     http.Redirect(response, request, "/", 302)
 }

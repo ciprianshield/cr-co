@@ -16,8 +16,11 @@ func main() {
     router.HandleFunc("/index", common.IndexPageHandler) // GET
     router.HandleFunc("/login", common.LoginHandler).Methods("POST")
  
-    router.HandleFunc("/register", common.RegisterPageHandler).Methods("GET")
+    router.HandleFunc("/register", common.RegisterPageHandler)
     router.HandleFunc("/register", common.RegisterHandler).Methods("POST")
+	
+	router.HandleFunc("/edit_profile", common.EditPageHandler)
+	router.HandleFunc("/edit_profile", common.EditHandler).Methods("POST")
  
     router.HandleFunc("/logout", common.LogoutHandler).Methods("POST")
  
