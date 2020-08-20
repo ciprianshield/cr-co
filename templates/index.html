@@ -1,19 +1,36 @@
-
+<!DOCTYPE html>
 <html>
-	<head>
-		<title>Google Auth Demo</title>
-		<meta name= "google-signin-client_id" content="870884524370-4degio3n3qeqdn5um4orrt56o6mvd843.apps.googleusercontent.com">
-		<script src = "https://apis.google.com/js/platform.js" async defer></script>
-	</head>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>Index</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" media="screen" href="main.css" />
 	
-	<body>
-		<h1>Demo Google</h1>
-		<form method = "post" action = "/logout">
-		<button type = "submit"> Logout </button>
-		</form>
-		<div class="g-signin2" data-onsuccess="onSignIn"></div>
-		
-	</body>
-	
-	
+</head>
+<body>
+	<h1>Login</h1> 
+	<form action ="/login_process" method="POST">
+		<label for="email">Email</label>
+		<input type = "text" name="email" id="email" placeholder = "email address"></br></br>
+		<label for="password">Password</label>
+		<input type= "password" id="password" name="password"> </br></br>
+		<input type = "submit">
+	</form>
+	</br></br></br>
+	<h1>Signup New User</h1>
+	<form action ="/signup" method="POST">
+		<label for="signup_email">Email</label>
+		<input type = "text" name="signup_email" id="signup_email" placeholder = "email address"></br></br>
+		<label for="signup_password">Password</label>
+		<input type= "password" id="signup_password" name="signup_password"></br></br>
+		<label for="signup_password_confirm">Confirm password</label>
+		<input type= "password" id="signup_password_confirm" name="signup_password_confirm"> </br></br>
+		<label for="signup_age">Age</label>
+		<input type = "text" id="signup_age" name ="signup_age" placeholder = "how old are you?"></br></br>
+		<label for="signup_gender">Gender</label>
+		<input type = "text" id="signup_gender" name ="signup_gender"></br></br>
+		<input type = "submit">
+	</form>
+</body>
 </html>

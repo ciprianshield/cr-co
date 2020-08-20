@@ -81,13 +81,20 @@ func EditHandler(w http.ResponseWriter, r *http.Request) {
  
 // for POST
 func RegisterHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("RegisterHandler POST called")
+	fmt.Println("RegisterHandler POST called "+ r.Method)
+	if r.Method != "POST"{
+		http.Redirect(w,r,"/",http.StatusSeeOther)
+		return
+	}
+
     r.ParseForm()
- 
+	
     uName := r.FormValue("username")
     email := r.FormValue("email")
     pwd := r.FormValue("password")
     confirmPwd := r.FormValue("confirmPassword")
+	
+	fmt.Println(uName+" " +email+" " +pwd+"confirmPwd");
  
     _uName, _email, _pwd, _confirmPwd := false, false, false, false
     _uName = !helpers.IsEmpty(uName)
