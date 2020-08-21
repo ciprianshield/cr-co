@@ -1,22 +1,49 @@
-<div class="container">
-	<h1>Edit/Change Password</h1>
-	<hr>
-	<form method="post" action="/edit>
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>Edit profile</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="google-signin-scope" content="profile email">
+    <meta name="google-signin-client_id" content="870884524370-4degio3n3qeqdn5um4orrt56o6mvd843.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+	<link rel="stylesheet" type="text/css" media="screen" href="main.css" />
 	
-		<label for="name">Email</label>
-		<input type="text" id ="email" name="email"> <br/><br/>
-	
-		<label for="name">Old Password</label>
-		<input type="password" id ="oldpassword" name="oldpassword"> <br/><br/>
-		
-		<label for="name">New password</label>
-		<input type="password" id ="newPassword" name="newPassword"> <br/><br/>
-		
-		<label for="name">Confirm new password</label>
-		<input type="password" id ="confirmPassword" name="confirmPassword"> <br/><br/>
-		
-		<form method = "post" action = "/edit_profile">
-		<button type = "submit"> Submit change </button>
-		</form>
+</head>
+<body onload= "checkIfLoggedIn()">
+	<form action ="/logout" method="POST">	
+	   <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark" 
+	   data-scope="https://www.googleapis.com/auth/userinfo.profile"
+	   data-accesstype="offline"
+	   data-redirecturi="http://localhost:8080/">
+	   </div>
 	</form>
-</div>
+	</br></br></br>
+	<h1>Edit profile</h1>
+	<form action ="/signup" method="POST">
+		<label for="signup_email">Email</label>
+		<input type = "text" name="signup_email" id="signup_email" placeholder = "email address"></br></br>
+		<label for="signup_password">Password</label>
+		<input type= "password" id="signup_password" name="signup_password"></br></br>
+		<label for="signup_password_confirm">Confirm password</label>
+		<input type= "password" id="signup_password_confirm" name="signup_password_confirm"> </br></br>
+		<label for="signup_age">Age</label>
+		<input type = "text" id="signup_age" name ="signup_age" placeholder = "how old are you?"></br></br>
+		<label for="signup_gender">Gender</label>
+		<input type = "text" id="signup_gender" name ="signup_gender">
+		</br></br>
+			<form action ="/save_edit" method="POST">
+				<button onclick="checkIfLoggedIn()">Save</button>
+			</form>
+			</br></br>
+			<form action ="/logout" method="POST">
+				<button onclick="logout()">Logout</button>
+			</form>
+		</form>
+		<script>
+	
+		</script>
+	
+</body>
+</html>

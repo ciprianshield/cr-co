@@ -9,14 +9,18 @@ import (
 const USER, PASS string = "adminc", "adminc"
 const IP, PORT string = "127.0.0.1", "3306"
 
-func Insert_user_table(email, password,age,gender string){
+func DbConn() (db *sql.DB) {
 
-	db, err := sql.Open("mysql", USER+":"+PASS+"@tcp("+IP+":"+PORT+")/test_db")
-	
-    // if there is an error opening the connection, handle it
+    db, err := sql.Open("mysql", USER+":"+PASS+"@tcp("+IP+":"+PORT+")/test_db")
     if err != nil {
         panic(err.Error())
-	}
+    }
+    return db
+}
+
+func Insert_user_table(email, password,age,gender string){
+
+	db := DbConn()
 	if Is_user_registered(email,password){
 		fmt.Println("User already registered!")
 		return
@@ -34,14 +38,7 @@ func Insert_user_table(email, password,age,gender string){
 
 func Edit_user_password(email, oldpass, newpass string){
 
-	db, err := sql.Open("mysql", USER+":"+PASS+"@tcp("+IP+":"+PORT+")/test_db")
-	
-    // if there is an error opening the connection, handle it
-    if err != nil {
-        panic(err.Error())
-	}
-	//to do
-	//query := "UPDATE users SET pass = '"+newpass+"' WHERE + " '
+	db := DbConn()
 	update, err := db.Query("UPDATE users SET pass = "+newpass+" WHERE pass = "+ oldpass+" AND email = "+ email)
 
 	if err != nil{
@@ -53,17 +50,12 @@ func Edit_user_password(email, oldpass, newpass string){
 
 func Is_user_registered(email, password string) bool{
 
-	db, err := sql.Open("mysql", USER+":"+PASS+"@tcp("+IP+":"+PORT+")/test_db")
-	
-    // if there is an error opening the connection, handle it
-    if err != nil {
-        panic(err.Error())
-	}
+	db := DbConn()
 
 	var exists bool = false
 	
 	//to do query
-	err = db.QueryRow("SELECT exists (SELECT * FROM users WHERE email like '"+email+"' and pass like '"+password+"')").Scan(&exists)
+	err := db.QueryRow("SELECT exists (SELECT * FROM users WHERE email like '"+email+"' and pass like '"+password+"')").Scan(&exists)
 	if err != nil{
 		panic(err.Error())
 	}
@@ -72,13 +64,8 @@ func Is_user_registered(email, password string) bool{
 }
 
 func Get_user_data(input_email string) (string ,string, string){
-	db, err := sql.Open("mysql", USER+":"+PASS+"@tcp("+IP+":"+PORT+")/test_db")
-	
-    // if there is an error opening the connection, handle it
-    if err != nil {
-        panic(err.Error())
-	}
 
+	db := DbConn()
 	var (
 		email string
 		age string
@@ -97,4 +84,19 @@ func Get_user_data(input_email string) (string ,string, string){
 		panic(err)
 	}
 	return input_email,age,gender
+}
+
+func Update_user_table(email, password, age, gender string){
+
+	db := DbConn()
+	sqlStatement := "UPDATE users WHERE SET age="+age+", gender= "+gender+" WHERE email like '"+email+"' and pass like '"+password+"';"
+    // if there is an error opening the connection, handle it
+
+	update, err := db.Query(sqlStatement)
+
+	if err != nil{
+		panic(err.Error())
+	}
+	defer db.Close()
+	defer update.Close();
 }
